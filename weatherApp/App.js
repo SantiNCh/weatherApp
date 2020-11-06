@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 
 import Search from './screens/Search';
-
+import Home from './screens/Home';
 
 const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#00aaff"/>
-      <Search />
+      <Home />
     
     
     </>
