@@ -3,7 +3,7 @@ import { TextInput, Button, Card, Title } from 'react-native-paper';
 import {View, Text, FlatList, Image} from 'react-native';
 import Header from './Header';
 
-const Home = () => {
+const Home = (props) => {
     const [info, setInfo] = useState({
         name:"loading !!",
         temp:"loading",
@@ -15,7 +15,10 @@ const Home = () => {
         getWeather()
     }, [])
     const getWeather = () =>{
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=london&appid=f527682159f3571451fb12ddccf75838&units=metric`)
+        let myCity;
+        const {city} = props.route.params;
+        myCity = city;
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${myCity}&appid=f527682159f3571451fb12ddccf75838&units=metric`)
         .then(data =>data.json())
         .then(results=>{
             setInfo({
@@ -26,6 +29,9 @@ const Home = () => {
                 icon:results.weather[0].icon
             })
         })
+    }
+    if(props.route.params.city != "london"){
+        getWeather();
     }
     return(
         <View style={{flex:1}}>

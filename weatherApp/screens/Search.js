@@ -3,7 +3,7 @@ import { TextInput, Button, Card } from 'react-native-paper';
 import { Appbar, Title } from 'react-native-paper';
 import {View, Text, FlatList} from 'react-native';
 import Header from './Header';
-const Search = () => {
+const Search = ({navigation}) => {
   const [city, setCity] = useState('');
   const [cities, setCities] = useState([]);
   const fetchCities = (text) =>{
@@ -14,6 +14,13 @@ const Search = () => {
             setCities(cityData.location.address.slice(0,9))
             console.log(cityData.location.address.slice(0,9))
         })
+  }
+  const btnClick = ()=>{
+      navigation.navigate("home", {city:city})
+  }
+  const listClick = (cityname)=>{
+      setCity(cityname)
+      navigation.navigate("home", {city:cityname})
   }
   return (
     <View style={{flex:1}}>
@@ -26,14 +33,18 @@ const Search = () => {
 
         <Button icon="content-save" mode="contained" onPress={() => console.log('Pressed')}
         theme={{colors:{primary:"#00aaff"}}}
-        style={{margin:20}}>
+        style={{margin:20}}
+        onPress={()=>btnClick()}>
             <Text style={{color:"white"}}>Press me</Text>
         </Button>
         <FlatList 
         data={cities}
         renderItem={({item})=>{
             return(
-                <Card style={{margin:2, padding:12}}>
+                <Card 
+                 style={{margin:2, padding:12}}
+                 onPress={()=>listClick(item)}
+                >
                     <Text>{item}</Text>
                 </Card>
             )
