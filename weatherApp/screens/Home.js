@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { TextInput, Button, Card, Title } from 'react-native-paper';
 import {View, Text, FlatList, Image} from 'react-native';
 import Header from './Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Home = (props) => {
     const [info, setInfo] = useState({
@@ -14,10 +16,13 @@ const Home = (props) => {
     useEffect(()=>{
         getWeather()
     }, [])
-    const getWeather = () =>{
-        let myCity;
-        const {city} = props.route.params;
-        myCity = city;
+    const getWeather = async () =>{
+        let myCity = await AsyncStorage.getItem("newcity")
+        if(!myCity){
+            const {city} = props.route.params;
+            myCity = city;
+        }
+        
         fetch(`https://api.openweathermap.org/data/2.5/weather?q=${myCity}&appid=f527682159f3571451fb12ddccf75838&units=metric`)
         .then(data =>data.json())
         .then(results=>{
@@ -28,6 +33,9 @@ const Home = (props) => {
                 desc:results.weather[0].description,
                 icon:results.weather[0].icon
             })
+        })
+        .catch(err=>{
+            alert(err.message)
         })
     }
     if(props.route.params.city != "london"){
